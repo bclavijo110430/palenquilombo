@@ -1,0 +1,153 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { SITE, asset } from '../consts';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const home = lang === 'pt' ? asset('pt/') : asset('');
+const year = new Date().getFullYear();
+
+const links = [
+  { href: '#about', label: t.nav.about },
+  { href: '#gallery', label: t.nav.gallery },
+  { href: '#videos', label: t.nav.videos },
+  { href: '#schedule', label: t.nav.schedule },
+  { href: '#contact', label: t.nav.contact },
+];
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href={home} class="footer__logo">
+        <img src={asset('logo-badge.png')} width="52" height="52" alt="" />
+        <span>
+          <strong>Palenquilombo</strong>
+          <small>Capoeira · {SITE.master}</small>
+        </span>
+      </a>
+      <p class="footer__tagline">{t.footer.tagline}</p>
+      <LanguageSwitcher class="lang--footer" />
+    </div>
+
+    <nav class="footer__nav" aria-label={t.footer.nav}>
+      <span class="footer__heading">{t.footer.nav}</span>
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+
+    <div class="footer__contact">
+      <span class="footer__heading">{t.contact.eyebrow}</span>
+      <p>{SITE.address}</p>
+      <p>{t.contact.city}</p>
+      <a href={SITE.mapLink} target="_blank" rel="noopener">{t.contact.mapLabel}</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© {year} {SITE.name}. {t.footer.rights}</p>
+    <p>{t.footer.builtwith} <span class="footer__heart" aria-hidden="true">&#9829;</span> · Astro</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--c-ink);
+    color: var(--c-text-on-dark-muted);
+    border-top: 1px solid var(--c-border-dark);
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: 2.5rem;
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--c-text-on-dark);
+  }
+
+  .footer__logo img {
+    border-radius: 50%;
+    background: #fff;
+    padding: 2px;
+  }
+
+  .footer__logo strong {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1.1rem;
+  }
+
+  .footer__logo small {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--c-text-on-dark-muted);
+  }
+
+  .footer__tagline {
+    margin: 1rem 0 1.25rem;
+    max-width: 34ch;
+  }
+
+  .footer__heading {
+    display: block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    color: var(--c-terracotta-light);
+    margin-bottom: 0.9rem;
+  }
+
+  .footer__nav,
+  .footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .footer__nav a {
+    transition: color var(--transition);
+  }
+
+  .footer__nav a:hover,
+  .footer__contact a:hover {
+    color: #fff;
+  }
+
+  .footer__contact a {
+    color: var(--c-cream);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--c-border-dark);
+    font-size: 0.82rem;
+  }
+
+  .footer__bottom p {
+    margin: 0;
+  }
+
+  .footer__heart {
+    color: var(--c-terracotta);
+  }
+
+  @media (min-width: 780px) {
+    .footer__grid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+    }
+  }
+</style>

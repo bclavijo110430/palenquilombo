@@ -1,0 +1,90 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { SCHEDULE } from '../consts';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="section schedule" id="schedule">
+  <div class="container schedule__inner">
+    <div>
+      <span class="eyebrow">{t.schedule.eyebrow}</span>
+      <h2 class="section__title">{t.schedule.title}</h2>
+      <p class="section__lead">{t.schedule.lead}</p>
+    </div>
+
+    <ul class="schedule__list">
+      {
+        SCHEDULE.map((slot) => (
+          <li class="slot">
+            <span class="slot__day">{t.schedule.days[slot.dayKey]}</span>
+            <span class="slot__time">{slot.time}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <p class="schedule__note container">{t.schedule.note}</p>
+</section>
+
+<style>
+  .schedule {
+    background:
+      radial-gradient(120% 120% at 100% 0%, rgba(192, 90, 54, 0.14), transparent 55%),
+      var(--c-cream-soft);
+  }
+
+  .schedule__inner {
+    display: grid;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: center;
+  }
+
+  .schedule__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .slot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #fff;
+    border: 1px solid var(--c-border);
+    border-left: 5px solid var(--c-terracotta);
+    border-radius: var(--radius);
+    padding: 1.15rem 1.4rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .slot__day {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 1.25rem;
+  }
+
+  .slot__time {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--c-terracotta-dark);
+    white-space: nowrap;
+  }
+
+  .schedule__note {
+    margin-top: 1.5rem;
+    color: var(--c-text-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 820px) {
+    .schedule__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

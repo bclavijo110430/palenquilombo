@@ -1,0 +1,512 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { SITE, WHATSAPP, whatsappLink, asset } from '../consts';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const home = lang === 'pt' ? asset('pt/') : asset('');
+const waHref = whatsappLink(t.whatsapp.message);
+
+const icons = {
+  about:
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="8" r="3.2"/><path d="M20 19v-1.4a3.4 3.4 0 0 0-2.6-3.3"/><path d="M15.6 5.2a3.2 3.2 0 0 1 0 5.6"/></svg>',
+  gallery:
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.7" cy="9.3" r="1.5"/><path d="m4 17 4.4-4.4a2 2 0 0 1 2.8 0L15.8 17"/><path d="m14.6 15 1.4-1.4a2 2 0 0 1 2.8 0l1.2 1.2"/></svg>',
+  videos:
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m10 9 5 3-5 3z"/></svg>',
+  schedule:
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3.5v3M16 3.5v3M3.5 10h17"/></svg>',
+  contact:
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6.5-5.5 6.5-10.5a6.5 6.5 0 1 0-13 0C5.5 15.5 12 21 12 21Z"/><circle cx="12" cy="10.4" r="2.3"/></svg>',
+};
+
+const waIcon =
+  '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.05 20.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.23 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"/></svg>';
+
+const links = [
+  { href: '#about', label: t.nav.about, icon: icons.about },
+  { href: '#gallery', label: t.nav.gallery, icon: icons.gallery },
+  { href: '#videos', label: t.nav.videos, icon: icons.videos },
+  { href: '#schedule', label: t.nav.schedule, icon: icons.schedule },
+  { href: '#contact', label: t.nav.contact, icon: icons.contact },
+];
+---
+
+<header class="site-header" id="site-header">
+  <div class="menu-scrim" id="menu-scrim" aria-hidden="true"></div>
+
+  <div class="bar">
+    <a href={home} class="brand" aria-label={`${SITE.name} — Inicio`}>
+      <img
+        class="brand__badge"
+        src={asset('logo-badge.png')}
+        width="46"
+        height="46"
+        alt="Emblema de Palenquilombo Capoeira"
+      />
+      <span class="brand__text">
+        <span class="brand__name">Palenquilombo</span>
+        <span class="brand__sub">Capoeira · {SITE.master}</span>
+      </span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Principal">
+      {
+        links.map((link) => (
+          <a class="crystal nav-pill" href={link.href}>
+            <span class="nav-pill__icon" set:html={link.icon} />
+            <span>{link.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="actions">
+      <LanguageSwitcher class="lang--header" />
+      <a
+        class="header-cta"
+        href={waHref}
+        target="_blank"
+        rel="noopener"
+        aria-label={`${t.whatsapp.label} — ${WHATSAPP.display}`}
+      >
+        <span set:html={waIcon} />
+        {t.whatsapp.label}
+      </a>
+      <button
+        class="crystal menu-toggle"
+        id="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-panel"
+        aria-label={t.nav.menu}
+      >
+        <span class="menu-toggle__bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="mobile-panel"
+    id="mobile-panel"
+    aria-hidden="true"
+    inert
+    data-open-label={t.nav.menu}
+    data-close-label={t.nav.close}
+  >
+    <nav class="tiles" aria-label="Principal">
+      {
+        links.map((link) => (
+          <a class="crystal tile" href={link.href}>
+            <span class="tile__icon" set:html={link.icon} />
+            <span class="tile__label">{link.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="mobile-panel__foot">
+      <LanguageSwitcher class="lang--panel" />
+      <a class="crystal tile tile--wa" href={waHref} target="_blank" rel="noopener">
+        <span class="tile__icon" set:html={waIcon} />
+        <span class="tile__label">{t.whatsapp.label}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0.7rem clamp(0.75rem, 2.5vw, 1.5rem) 0;
+    color: var(--c-text-on-dark);
+    pointer-events: none;
+    transition: padding var(--transition);
+  }
+
+  /* Frosted backdrop that dims the page behind the buttons */
+  .menu-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 8, 6, 0.42);
+    -webkit-backdrop-filter: blur(7px) saturate(1.2);
+    backdrop-filter: blur(7px) saturate(1.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition), visibility var(--transition);
+  }
+
+  .site-header.is-open .menu-scrim {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .bar {
+    pointer-events: auto;
+    position: relative;
+    max-width: var(--container);
+    margin-inline: auto;
+    min-height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0 clamp(0.8rem, 2vw, 1.4rem);
+    border-radius: 18px;
+    background: rgba(23, 19, 15, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(14px) saturate(1.35);
+    backdrop-filter: blur(14px) saturate(1.35);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.24);
+    animation: header-drop 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: background var(--transition), box-shadow var(--transition),
+      min-height var(--transition), border-radius var(--transition);
+  }
+
+  .site-header.is-scrolled .bar {
+    min-height: 60px;
+    border-radius: 14px;
+    background: rgba(17, 14, 11, 0.82);
+    box-shadow: 0 14px 42px rgba(0, 0, 0, 0.4);
+  }
+
+  @keyframes header-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-120%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .brand__badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 2px;
+    flex: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    transition: transform 460ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow var(--transition);
+  }
+
+  .brand:hover .brand__badge {
+    transform: rotate(-10deg) scale(1.08);
+    box-shadow: 0 4px 16px rgba(192, 90, 54, 0.5);
+  }
+
+  .brand__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+    min-width: 0;
+  }
+
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
+    background: linear-gradient(90deg, #fff, var(--c-cream));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .brand__sub {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-text-on-dark-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-desktop {
+    display: none;
+    gap: 0.5rem;
+    margin-inline: auto;
+    padding-inline: 0.5rem;
+  }
+
+  .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 14px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    font-size: 0.76rem;
+  }
+
+  .nav-pill__icon,
+  .tile__icon {
+    display: grid;
+    place-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .header-cta {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.05rem;
+    min-height: 42px;
+    border-radius: 14px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    color: #fff;
+    background: linear-gradient(160deg, rgba(37, 211, 102, 0.92), rgba(30, 172, 82, 0.82));
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+    backdrop-filter: blur(10px) saturate(1.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 8px 20px rgba(37, 211, 102, 0.32);
+    transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+  }
+
+  .header-cta:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 12px 26px rgba(37, 211, 102, 0.45);
+  }
+
+  .menu-toggle {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu-toggle__bars,
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c-text-on-dark);
+    transition: transform var(--transition), opacity var(--transition);
+    position: relative;
+    z-index: 1;
+  }
+
+  .menu-toggle__bars {
+    position: relative;
+  }
+
+  .menu-toggle__bars::before {
+    position: absolute;
+    top: -6px;
+  }
+
+  .menu-toggle__bars::after {
+    position: absolute;
+    top: 6px;
+  }
+
+  .site-header.is-open .menu-toggle__bars {
+    background: transparent;
+  }
+
+  .site-header.is-open .menu-toggle__bars::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .site-header.is-open .menu-toggle__bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mobile-panel {
+    pointer-events: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 0.9rem clamp(0.75rem, 2.5vw, 1.5rem) 0;
+    opacity: 0;
+    transform: translateY(-12px);
+    visibility: hidden;
+    transition: opacity var(--transition), transform var(--transition),
+      visibility var(--transition);
+  }
+
+  .site-header.is-open .mobile-panel {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .tiles {
+    max-width: 30rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.8rem;
+    min-height: 96px;
+    padding: 0.9rem 1rem;
+    border-radius: 20px;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.92rem;
+  }
+
+  .tile > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .tile .tile__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  .tile__label {
+    line-height: 1.1;
+  }
+
+  .tiles .tile:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .mobile-panel__foot {
+    max-width: 30rem;
+    margin: 0.7rem auto 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .mobile-panel__foot :global(.lang) {
+    align-self: center;
+  }
+
+  .tile--wa {
+    flex: 1;
+    min-width: 9rem;
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.1rem;
+    color: #fff;
+    background: linear-gradient(160deg, rgba(37, 211, 102, 0.92), rgba(30, 172, 82, 0.82));
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .tile--wa .tile__icon {
+    width: auto;
+    height: auto;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  @media (min-width: 1024px) {
+    .nav-desktop {
+      display: flex;
+    }
+    .header-cta {
+      display: inline-flex;
+    }
+    .menu-toggle {
+      display: none;
+    }
+    .mobile-panel,
+    .menu-scrim {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar {
+      animation: none;
+    }
+    .brand:hover .brand__badge {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('menu-toggle');
+  const panel = document.getElementById('mobile-panel');
+  const scrim = document.getElementById('menu-scrim');
+
+  const setOpen = (open: boolean) => {
+    if (!header || !toggle || !panel) return;
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute(
+      'aria-label',
+      open ? panel.dataset.closeLabel || 'Cerrar menú' : panel.dataset.openLabel || 'Abrir menú'
+    );
+    panel.setAttribute('aria-hidden', String(!open));
+    panel.toggleAttribute('inert', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  toggle?.addEventListener('click', () => {
+    setOpen(!header?.classList.contains('is-open'));
+  });
+
+  scrim?.addEventListener('click', () => setOpen(false));
+
+  panel?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

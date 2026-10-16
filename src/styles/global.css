@@ -1,0 +1,282 @@
+:root {
+  /* Brand palette — derived from the AICA 2026 shirt + Palenquilombo logo */
+  --c-terracotta: #c05a36;
+  --c-terracotta-dark: #a2380f;
+  --c-terracotta-light: #d35f30;
+  --c-red: #c41e27;
+  --c-red-deep: #8f151c;
+
+  --c-charcoal: #231e1f;
+  --c-ink: #17130f;
+  --c-ink-soft: #2c2521;
+
+  --c-sand: #d9cfc0;
+  --c-cream: #efe6d7;
+  --c-cream-soft: #f6efe3;
+  --c-paper: #faf5ec;
+
+  --c-wood: #5f4836;
+  --c-wood-light: #8a6a4f;
+  --c-olive: #7f8446;
+  --c-gold: #c9a24b;
+
+  --c-text: #231e1f;
+  --c-text-muted: #6b5f56;
+  --c-text-on-dark: #f3ebdd;
+  --c-text-on-dark-muted: #c9bdae;
+  --c-border: rgba(35, 30, 31, 0.12);
+  --c-border-dark: rgba(243, 235, 221, 0.14);
+
+  --font-display: 'Oswald Variable', 'Oswald', system-ui, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+
+  --shadow-sm: 0 1px 2px rgba(23, 19, 15, 0.08), 0 2px 8px rgba(23, 19, 15, 0.06);
+  --shadow-md: 0 8px 24px rgba(23, 19, 15, 0.12);
+  --shadow-lg: 0 24px 60px rgba(23, 19, 15, 0.28);
+
+  --radius: 14px;
+  --radius-lg: 24px;
+  --container: 1180px;
+
+  --space-section: clamp(3.5rem, 8vw, 7rem);
+  --transition: 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --header-h: 68px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.075rem);
+  line-height: 1.65;
+  color: var(--c-text);
+  background: var(--c-paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+video,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: clamp(1.15rem, 4vw, 2.5rem);
+}
+
+.section {
+  padding-block: var(--space-section);
+  position: relative;
+}
+
+:where(section[id], main[id]) {
+  scroll-margin-top: calc(var(--header-h) + 1.75rem);
+}
+
+.section--dark {
+  background: var(--c-ink);
+  color: var(--c-text-on-dark);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  color: var(--c-terracotta);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: currentColor;
+  display: inline-block;
+}
+
+.section__title {
+  font-size: clamp(1.9rem, 1.3rem + 3vw, 3.2rem);
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+}
+
+.section__lead {
+  max-width: 62ch;
+  margin-top: 1rem;
+  color: var(--c-text-muted);
+  font-size: 1.05rem;
+}
+
+.section--dark .section__lead {
+  color: var(--c-text-on-dark-muted);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.5rem;
+  min-height: 48px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  border: 2px solid transparent;
+  transition: transform var(--transition), background var(--transition),
+    color var(--transition), border-color var(--transition), box-shadow var(--transition);
+  touch-action: manipulation;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--c-terracotta), var(--c-terracotta-dark));
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--ghost {
+  border-color: currentColor;
+  color: inherit;
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  background: var(--c-terracotta);
+  border-color: var(--c-terracotta);
+  color: #fff;
+}
+
+.btn--whatsapp {
+  background: #25d366;
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--whatsapp:hover {
+  background: #20bd5a;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Crystal / frosted-glass surface (iOS Control Center style) */
+.crystal {
+  position: relative;
+  color: var(--c-text-on-dark);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.17), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  backdrop-filter: blur(16px) saturate(1.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.06), 0 8px 22px rgba(0, 0, 0, 0.26);
+  transition: transform var(--transition), background var(--transition),
+    box-shadow var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.crystal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(130% 90% at 18% -20%, rgba(255, 255, 255, 0.45), transparent 55%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.crystal:hover {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.12));
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 14px 30px rgba(0, 0, 0, 0.32);
+}
+
+.crystal:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.btn:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--c-gold);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

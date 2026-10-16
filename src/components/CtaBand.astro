@@ -1,0 +1,75 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { whatsappLink } from '../consts';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="cta section--dark">
+  <div class="container cta__inner">
+    <div>
+      <h2 class="cta__title">{t.cta.title}</h2>
+      <p class="cta__text">{t.cta.text}</p>
+    </div>
+    <a
+      class="btn btn--primary cta__btn"
+      href={whatsappLink(t.whatsapp.message)}
+      target="_blank"
+      rel="noopener"
+    >
+      {t.cta.button}
+    </a>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, var(--c-terracotta-dark), var(--c-red-deep));
+    color: #fff;
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .cta__inner {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .cta__title {
+    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+    text-transform: uppercase;
+  }
+
+  .cta__text {
+    margin: 0.5rem 0 0;
+    max-width: 48ch;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .cta__btn {
+    background: #fff;
+    color: var(--c-terracotta-dark);
+    flex: none;
+  }
+
+  .cta__btn:hover {
+    background: var(--c-ink);
+    color: #fff;
+  }
+</style>

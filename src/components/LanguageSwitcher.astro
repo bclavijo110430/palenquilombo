@@ -1,0 +1,79 @@
+---
+import { languages, getLangFromUrl, type Lang } from '../i18n/ui';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+// Strip the site base and the current locale to get the inner route path.
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+let inner = Astro.url.pathname;
+if (base && inner.startsWith(base)) inner = inner.slice(base.length);
+inner = inner.replace(/^\/+/, '').replace(/\/+$/, '');
+inner = inner.replace(/^(pt|es)(?=\/|$)/, '').replace(/^\/+/, '');
+const innerPath = inner ? `/${inner}` : '/';
+
+const codes = Object.keys(languages) as Lang[];
+---
+
+<div class={`lang ${className}`} role="group" aria-label="Idioma / Idioma">
+  {
+    codes.map((code) =>
+      code === lang ? (
+        <span class="lang__item is-current" aria-current="true">
+          {code.toUpperCase()}
+        </span>
+      ) : (
+        <a
+          class="lang__item"
+          href={getRelativeLocaleUrl(code, innerPath)}
+          hreflang={code}
+          lang={code}
+        >
+          {code.toUpperCase()}
+        </a>
+      )
+    )
+  }
+</div>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.4rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    backdrop-filter: blur(14px) saturate(1.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 18px rgba(0, 0, 0, 0.24);
+  }
+
+  .lang__item {
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    color: var(--c-text-on-dark-muted);
+    transition: color var(--transition), background var(--transition);
+  }
+
+  a.lang__item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .lang__item.is-current {
+    color: #fff;
+    background: linear-gradient(160deg, var(--c-terracotta-light), var(--c-terracotta-dark));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+</style>

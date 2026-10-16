@@ -1,0 +1,135 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { WHATSAPP, whatsappLink } from '../consts';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const href = whatsappLink(t.whatsapp.message);
+---
+
+<a
+  class="wa-fab"
+  href={href}
+  target="_blank"
+  rel="noopener"
+  aria-label={`${t.whatsapp.floating} — ${WHATSAPP.display}`}
+>
+  <span class="wa-fab__ring" aria-hidden="true"></span>
+  <span class="wa-fab__icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+      <path
+        d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.91-7.02ZM12.05 20.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.23 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29Z"
+      ></path>
+    </svg>
+  </span>
+  <span class="wa-fab__label">{t.whatsapp.label}</span>
+</a>
+
+<style>
+  .wa-fab {
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 90;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 56px;
+    padding: 0 0.9rem 0 0.85rem;
+    border-radius: 999px;
+    background: #25d366;
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(37, 211, 102, 0.42), 0 3px 10px rgba(0, 0, 0, 0.18);
+    transform: translateY(0);
+    animation: wa-in 520ms cubic-bezier(0.22, 1, 0.36, 1) 600ms both;
+    transition: transform var(--transition), box-shadow var(--transition),
+      background var(--transition);
+  }
+
+  .wa-fab:hover {
+    transform: translateY(-3px) scale(1.03);
+    background: #20bd5a;
+    box-shadow: 0 16px 34px rgba(37, 211, 102, 0.5), 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .wa-fab:active {
+    transform: scale(0.97);
+  }
+
+  .wa-fab__icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .wa-fab__label {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-width var(--transition), opacity var(--transition),
+      margin var(--transition);
+  }
+
+  .wa-fab__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    border: 2px solid rgba(37, 211, 102, 0.7);
+    animation: wa-pulse 2.6s ease-out infinite;
+    pointer-events: none;
+    transform-origin: center;
+  }
+
+  @keyframes wa-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes wa-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @media (min-width: 480px) {
+    .wa-fab:hover .wa-fab__label,
+    .wa-fab:focus-visible .wa-fab__label {
+      max-width: 14rem;
+      opacity: 1;
+      margin-left: 0.1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa-fab {
+      animation: none;
+    }
+    .wa-fab__ring {
+      animation: none;
+      opacity: 0.5;
+    }
+  }
+</style>
